@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pouclients"
+authors = [
+	{name = "DaniElectra", email = "danielectra@outlook.com"},
+]
+description = "Network library for Pou game servers"
+readme = "README.md"
+license = {text = "MIT"}
+dependencies = [
+	"requests",
+]
+dynamic = ["version"]
