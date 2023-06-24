@@ -212,3 +212,24 @@ class UserNotLoggedIn(Exception):
 
 	def __init__(self, message: str):
 		self.message = message
+
+pou_errors = {
+	"ClientOutdated": ClientOutdated,
+	"EmailAlreadyRegistered": EmailAlreadyRegistered,
+	"EmailNotRegistered": EmailNotRegistered,
+	"FeatureMaintenance": FeatureMaintenance,
+	"IncorrectPassword": IncorrectPassword,
+	"IncorrectUserCredentials": IncorrectUserCredentials,
+	"InvalidArgumentFormat": InvalidArgumentFormat,
+	"InvalidRequest": InvalidRequest,
+	"NicknameNotAvailable": NicknameNotAvailable,
+	"NotYourTurn": NotYourTurn,
+	"ObjectNotFound": ObjectNotFound,
+	"PermissionDenied": PermissionDenied,
+	"SiteOffline": SiteOffline,
+	"TMR": TooManyRegisterAttempts,
+	"TMSA": TooManySocialActions,
+	"UserBanned": UserBanned,
+	"UserIsMe": UserIsMe,
+	"UserNotLoggedIn": UserNotLoggedIn
+}

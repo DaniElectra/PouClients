@@ -2,4 +2,4 @@
 #
 # SPDX-License-Identifier: MIT
 
-from pou.client import PouClient
+from pou.online.client import PouClient

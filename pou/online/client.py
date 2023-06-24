@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-from pou import account, request, site, user
+from pou.online import account, request, site, user
 
 import hashlib, json
 import requests
@@ -41,6 +41,10 @@ class PouClient:
 
 		return client
 
+# ---------------------
+# --- Site endpoint ---
+# ---------------------
+
 	async def check_email(self, email: str):
 		"""Checks if a provided email address is registered inside the server.
 		Returns a Captcha for registration if the email is not registered, and
@@ -50,9 +54,24 @@ class PouClient:
 		response = request.pou_request(self, "/ajax/site/check_email", "POST", params)
 
 		if not response["registered"]:
-			captcha = site.Captcha()
-			captcha.from_response(response)
+			captcha = site.Captcha.from_response(response)
 			return captcha
+
+	async def top_likes(self):
+		"""Gets the 20 most liked users on the Pou game server. Returns an
+		array showing the information of each user.
+		"""
+
+		response = request.pou_request(self, "/ajax/site/top_likes", "GET")
+
+		if response["ok"]:
+			user_list = []
+
+			for pou_user in response["items"]:
+				user_info = user.UserInfo.from_response(pou_user)
+				user_list.append(user_info)
+
+			return user_list
 
 	async def register(self, email: str, captcha_id: str, captcha_answer: str):
 		"""Tries to register an account with the given email address using the
@@ -68,18 +87,16 @@ class PouClient:
 
 		if "error" in response:
 			if response["error"]["type"] == "ICap":
-				captcha = site.Captcha()
-				captcha.from_response(response)
+				captcha = site.Captcha.from_response(response)
 				return captcha
 
 		if response["success"]:
-			registration_info = site.RegistrationInfo()
-			registration_info.from_response(response)
+			registration_info = site.RegistrationInfo.from_response(response)
 			return registration_info
 
 	async def login(self, email: str, password: str):
 		"""Tries to login to Pou game servers with the specified account. If the
-		login succeeds, returns an AccountData with the details of the
+		login succeeds, returns a UserLogin class with the details of the
 		account, and returns None if it fails.
 		"""
 
@@ -90,70 +107,12 @@ class PouClient:
 		response = request.pou_request(self, "/ajax/site/login", "POST", params)
 
 		if response["success"]:
-			account_data = account.AccountData()
-			account_data.from_response(response)
-			return account_data
+			user_login = site.UserLogin.from_response(response)
+			return user_login
 
-	async def logout(self):
-		"""Logs off the server if the session is logged in to an account. Returns
-		a bool telling if the logout succeeds or not.
-		"""
-
-		response = request.pou_request(self, "/ajax/account/logout", "POST")
-
-		return response["success"]
-
-	async def account_info(self):
-		"""Gets the full private information about the account the client is logged
-		into. Returns an AccountInfo with the account information.
-		"""
-
-		response = request.pou_request(self, "/ajax/account/info", "GET")
-
-		if response["ok"]:
-			account_info = account.AccountInfo()
-			account_info.from_response(response)
-			return account_info
-
-	async def favorites(self, account_id: int, since: int = 0):
-		"""Gets the accounts that a user has liked before a specified timestamp.
-		Returns a UserList showing the information of each account, and a next
-		argument if the list has 20 or more users.
-		"""
-
-		params = { "id": account_id, "s": since }
-		response = request.pou_request(self, "/ajax/user/favorites", "GET", params)
-
-		if response["ok"]:
-			user_list = user.UserList()
-			user_list.from_response(response)
-			return user_list
-
-	async def likers(self, account_id: int, since: int = 0):
-		"""Gets the accounts that have liked a user before a specified timestamp.
-		Returns a UserList showing the information of each account, and a next
-		argument if the list has 20 or more users.
-		"""
-
-		params = { "id": account_id, "s": since }
-		response = request.pou_request(self, "/ajax/user/likers", "GET", params)
-
-		if response["ok"]:
-			user_list = user.UserList()
-			user_list.from_response(response)
-			return user_list
-
-	async def top_likes(self):
-		"""Gets the 20 most liked users on the Pou game server. Returns a
-		UserList showing the information of each user.
-		"""
-
-		response = request.pou_request(self, "/ajax/site/top_likes", "GET")
-
-		if response["ok"]:
-			user_list = user.UserList()
-			user_list.from_response(response)
-			return user_list
+# ------------------------
+# --- Account endpoint ---
+# ------------------------
 
 	async def save(self, save_state: dict, min_info: dict):
 		"""Saves the Pou, game state and online scores to the server. Returns a
@@ -175,6 +134,15 @@ class PouClient:
 
 		return response["success"]
 
+	async def logout(self):
+		"""Logs off the server if the session is logged in to an account. Returns
+		a bool telling if the logout succeeds or not.
+		"""
+
+		response = request.pou_request(self, "/ajax/account/logout", "POST")
+
+		return response["success"]
+
 	async def delete(self):
 		"""Deletes the account of the client from the server. All information
 		relating the account will be deleted. Returns a bool telling if the
@@ -192,4 +160,43 @@ class PouClient:
 
 		return response["success"]
 
+	async def account_info(self):
+		"""Gets the full private information about the account the client is logged
+		into. Returns an AccountInfo with the account information.
+		"""
 
+		response = request.pou_request(self, "/ajax/account/info", "GET")
+
+		if response["ok"]:
+			account_info = account.AccountInfo.from_response(response)
+			return account_info
+
+# ---------------------
+# --- User endpoint ---
+# ---------------------
+
+	async def favorites(self, account_id: int, since: int = 0):
+		"""Gets the accounts that a user has liked before a specified timestamp.
+		Returns a UserList showing the information of each account, and a next
+		argument if the list has 20 or more users.
+		"""
+
+		params = { "id": account_id, "s": since }
+		response = request.pou_request(self, "/ajax/user/favorites", "GET", params)
+
+		if response["ok"]:
+			user_list = user.UserList.from_response(response)
+			return user_list
+
+	async def likers(self, account_id: int, since: int = 0):
+		"""Gets the accounts that have liked a user before a specified timestamp.
+		Returns a UserList showing the information of each account, and a next
+		argument if the list has 20 or more users.
+		"""
+
+		params = { "id": account_id, "s": since }
+		response = request.pou_request(self, "/ajax/user/likers", "GET", params)
+
+		if response["ok"]:
+			user_list = user.UserList.from_response(response)
+			return user_list
