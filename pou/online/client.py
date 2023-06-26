@@ -94,6 +94,28 @@ class PouClient:
 			registration_info = site.RegistrationInfo.from_response(response)
 			return registration_info
 
+	async def top_scores(self, game_id: int, period: str):
+		"""Gets the ranking of the 20 users with the highest score on a selected
+		game during a period of time.
+
+		The period can be represented as "today", "week", "month" or
+		"alltime".
+
+		Returns an array showing the score information of each user.
+		"""
+
+		params = { "g": game_id, "d": period }
+		response = request.pou_request(self, "/ajax/site/top_scores", "GET")
+
+		if response["ok"]:
+			user_list = []
+
+			for pou_user in response["items"]:
+				user_info = site.UserScoreInfo.from_response(pou_user)
+				user_list.append(user_info)
+
+			return user_list
+
 	async def login(self, email: str, password: str):
 		"""Tries to login to Pou game servers with the specified account. If the
 		login succeeds, returns a UserLogin class with the details of the
@@ -116,7 +138,7 @@ class PouClient:
 
 	async def save(self, save_state: dict, min_info: dict):
 		"""Saves the Pou, game state and online scores to the server. Returns a
-		bool telling if the save succeeds or not.
+		bool telling if the save succeeds.
 		"""
 
 		payload = {"minInfo": json.dumps(min_info), "state": json.dumps(save_state)}
@@ -136,7 +158,7 @@ class PouClient:
 
 	async def logout(self):
 		"""Logs off the server if the session is logged in to an account. Returns
-		a bool telling if the logout succeeds or not.
+		a bool telling if the logout succeeds.
 		"""
 
 		response = request.pou_request(self, "/ajax/account/logout", "POST")
@@ -146,7 +168,7 @@ class PouClient:
 	async def delete(self):
 		"""Deletes the account of the client from the server. All information
 		relating the account will be deleted. Returns a bool telling if the
-		deletion succeeds or not.
+		deletion succeeds.
 		"""
 		cookies = self.session.cookies.get_dict()
 		unn_session = cookies["unn_session"]
@@ -170,6 +192,19 @@ class PouClient:
 		if response["ok"]:
 			account_info = account.AccountInfo.from_response(response)
 			return account_info
+
+	async def check_password(self, password: str):
+		"""Checks if the password given matches with the password of the client's
+		account. Returns a bool telling if the password is correct.
+		"""
+
+		# The server requires the password to be sent as an MD5 hash
+		p = hashlib.md5(password.encode("utf-8")).hexdigest()
+
+		params = {"p": p}
+		response = request.pou_request(self, "/ajax/account/check_password", "POST", params)
+
+		return response["ok"]
 
 # ---------------------
 # --- User endpoint ---
@@ -199,4 +234,17 @@ class PouClient:
 
 		if response["ok"]:
 			user_list = user.UserList.from_response(response)
+			return user_list
+
+	async def visitors(self, account_id: int, since: int = 0):
+		"""Gets the accounts that have visited a user before a specified timestamp.
+		Returns a UserVisitors showing the information of each account, and a
+		next argument if the list has 20 or more users.
+		"""
+
+		params = { "id": account_id, "s": since }
+		response = request.pou_request(self, "/ajax/user/visitors", "GET", params)
+
+		if response["ok"]:
+			user_list = user.UserVisitors.from_response(response)
 			return user_list

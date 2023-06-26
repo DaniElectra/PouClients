@@ -29,13 +29,16 @@ class UserScoreInfo:
 		self.score = 0
 
 	@staticmethod
-	def from_response(self, response: dict):
+	def from_response(response: dict):
 		"""Fills the attributes of this class from a server response."""
 
 		user_score_info = UserScoreInfo()
 		user_score_info.account_id = int(response["i"])
 		user_score_info.nickname = response["n"]
-		user_score_info.min_info = json.loads(response["minI"])
+
+		if response["minI"]:
+			user_score_info.min_info = json.loads(response["minI"])
+
 		user_score_info.l = int(response["l"])
 		user_score_info.likers_count = int(response["nL"])
 		user_score_info.score = int(response["s"])
@@ -47,7 +50,7 @@ class UserScoreInfo:
 		if "lM" in response:
 			user_score_info.likes_me = bool(response["lM"])
 
-		return user_info
+		return user_score_info
 
 class Captcha:
 	"""Stores all the information about the server captcha upon registering a

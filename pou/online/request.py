@@ -37,7 +37,7 @@ def pou_request(client, path, method, params = None, payload = None):
 			raise errors.NicknameNotAvailable(response["error"]["message"], response["error"]["nickname"])
 		elif error_type == "ObjectNotFound":
 			raise errors.ObjectNotFound(response["error"]["message"], response["error"]["resource"])
-		elif error_type in pou_errors:
+		elif error_type in errors.pou_errors:
 			raise errors.pou_errors[error_type](response["error"]["message"])
 
 	return response

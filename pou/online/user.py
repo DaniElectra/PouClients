@@ -83,3 +83,34 @@ class UserList:
 		user_list.count = int(response["count"])
 
 		return user_list
+
+class UserVisitors:
+	"""Provides a list of users which have been visitors of the client's
+	account or another user.
+	The list is ordered by the date when the action was taken, and if it
+	goes to 20 or more, a "next" argument is provided to go to the next
+	part.
+
+	Attributes:
+	items -- the list of users
+	next -- a Unix timestamp to show the older entries
+	"""
+
+	def __init__(self):
+		self.items = []
+		self.next = 0
+
+	@staticmethod
+	def from_response(response: dict):
+		"""Fills the attributes of this class from a server response."""
+
+		user_list = UserVisitors()
+
+		for user in response["items"]:
+			user_info = UserInfo.from_response(user)
+			user_list.items.append(user_info)
+
+		if "next" in response:
+			user_list.next = int(response["next"])
+
+		return user_list
