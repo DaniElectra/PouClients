@@ -10,63 +10,7 @@ Game preservation is very important, and thus is equally important to preserve t
 
 ## Features
 
-This package implements methods to access the Pou game server. Below are the list of supported API endpoints that Pou implements:
-
-### `http://app.pou.me/ajax/site` endpoints
-
-- [X] POST site/check_email
-- [ ] POST site/reset_password
-- [X] GET site/top_likes
-- [X] POST site/register
-- [ ] GET site/top_scores
-- [X] POST site/login
-
-### `http://app.pou.me/ajax/account` endpoints
-
-- [X] POST account/save
-- [X] POST account/logout
-- [X] POST account/delete
-- [X] GET account/info
-- [ ] POST account/change_nickname
-- [ ] POST account/change_email
-- [ ] POST account/check_password
-- [ ] POST account/change_password
-- [ ] POST account/scores
-
-### `http://app.pou.me/ajax/user` endpoints
-
-- [ ] POST user/send_message
-- [X] GET user/favorites
-- [ ] GET user/visitors
-- [X] GET user/likers
-- [ ] POST user/visit
-- [ ] POST user/like
-- [ ] POST user/unlike
-- [ ] GET user/game_sessions
-- [ ] POST user/play
-- [ ] GET user/messages
-
-### `http://app.pou.me/ajax/search` endpoints
-
-- [ ] POST search/visit_user_by_nickname
-- [ ] POST search/visit_user_by_email
-- [ ] POST search/visit_random_user
-- [ ] GET search/friend_by_nickname
-- [ ] GET search/friend_by_email
-- [ ] GET search/random_friend
-
-### `http://app.pou.me/ajax/game` endpoints
-
-- [ ] GET game/session/info
-- [ ] POST game/session/edit
-
-### `http://app.pou.me/ajax/notification` endpoints
-
-- [ ] POST notification/claim
-
-### `http://app.pou.me/ajax/store` endpoints
-
-- [ ] POST store/thumb
+This package implements methods to access the Pou game server and use Pou vs Pou. To view information about the currently implemented endpoints, check the [projects](https://github.com/DaniElectra/PouClients/projects) page.
 
 ## Credits
 
