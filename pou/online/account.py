@@ -11,7 +11,7 @@ class AccountInfo:
 	Attributes:
 	account_id -- the account ID
 	email -- the account email address
-	hP -- unknown argument
+	has_password -- if the account has a password set
 	nickname -- the account nickname
 	t -- unknown argument
 	l -- unknown argument
@@ -22,7 +22,7 @@ class AccountInfo:
 	def __init__(self):
 		self.account_id = 0
 		self.email = ""
-		self.hP = False
+		self.has_password = False
 		self.nickname = ""
 		self.t = ""
 		self.l = 0
@@ -36,7 +36,7 @@ class AccountInfo:
 		account_info = AccountInfo()
 		account_info.account_id = int(response["i"])
 		account_info.email = response["e"]
-		account_info.hP = response["hP"]
+		account_info.has_password = response["hP"]
 		account_info.nickname = response["n"]
 		account_info.t = response["t"]
 		account_info.l = int(response["l"])

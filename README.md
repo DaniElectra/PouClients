@@ -15,3 +15,5 @@ This package implements methods to access the Pou game server and use Pou vs Pou
 ## Credits
 
 This project has been inspired by [NintendoClients](https://github.com/kinnay/NintendoClients), which implements a networking library for Nintendo game servers.
+
+Credits to [H401217](https://github.com/H401217) for making the initial research on Pou's servers.

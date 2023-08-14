@@ -9,7 +9,7 @@ def pou_request(client, path, method, params = None, payload = None):
 	'''Makes a request to Pou game servers. Returns a dict unless the server
 	returns an error, for which an Exception will be thrown.'''
 	request_params = {
-		"_a": client.a,
+		"_a": client.api,
 		"_c": client.c,
 		"_v": client.version,
 		"_r": client.revision

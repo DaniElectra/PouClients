@@ -11,7 +11,7 @@ class PouClient:
 	"""Pou client that connects to the game server.
 
 	Attributes:
-	a -- unknown argument sent to server
+	api -- an indicator to access the API, should not be changed
 	c -- unknown argument sent to server
 	version -- the client version
 	revision -- the client revision
@@ -19,7 +19,7 @@ class PouClient:
 	session -- the session for handling the requests
 	"""
 	def __init__(self):
-		self.a = 1
+		self.api = 1
 		self.c = 1
 		self.version = 4
 		self.revision = 256
@@ -29,12 +29,12 @@ class PouClient:
 		self.session.cookies.set("unn_session", None)
 
 	@staticmethod
-	def from_version(a: int, c: int, version: int, revision: int):
+	def from_version(api: int, c: int, version: int, revision: int):
 		"""Creates a new PouClient using the provided client version and the
 		common parameters of the server.
 		"""
 		client = PouClient()
-		client.a = a
+		client.api = api
 		client.c = c
 		client.version = version
 		client.revision = revision

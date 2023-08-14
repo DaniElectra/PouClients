@@ -74,7 +74,10 @@ class Captcha:
 		captcha = Captcha()
 		captcha.captcha_id = response["capId"]
 		captcha.captcha_length = response["capLen"]
-		captcha.captcha_img = response["capImg"]
+
+		# For unknown reasons, the base64 PNG has an extra useless character
+		# that we have to remove for the image to decode properly
+		captcha.captcha_img = response["capImg"][:10] + response["capImg"][11:]
 
 		return captcha
 
@@ -110,7 +113,7 @@ class UserLogin:
 	account_id -- the account ID
 	nickname -- the account nickname
 	t -- unknown argument
-	hP -- unknown argument
+	has_password -- if the account has a password set
 	favorites_count -- the number of favorites the account has
 	likers_count -- the number of likers the account has
 	save_state -- the gave save data
@@ -122,7 +125,7 @@ class UserLogin:
 		self.account_id = 0
 		self.nickname = ""
 		self.t = ""
-		self.hP = False
+		self.has_password = False
 		self.favorites_count = 0
 		self.likers_count = 0
 		self.save_state = {}
@@ -137,7 +140,7 @@ class UserLogin:
 		user_login.account_id = response["i"]
 		user_login.nickname = response["n"]
 		user_login.t = response["t"]
-		user_login.hP = response["hP"]
+		user_login.has_password = response["hP"]
 		user_login.favorites_count = int(response["nF"])
 		user_login.likers_count = int(response["nL"])
 		user_login.save_state = json.loads(response["state"])
