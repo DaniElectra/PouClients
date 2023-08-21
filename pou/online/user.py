@@ -2,6 +2,8 @@
 #
 # SPDX-License-Identifier: MIT
 
+from pou.online import common
+
 import json
 
 class UserInfo:
@@ -35,7 +37,7 @@ class UserInfo:
 		user_info.nickname = response["n"]
 
 		if response["minI"]:
-			user_info.min_info = json.loads(response["minI"])
+			user_info.min_info = common.PouMinInfo.from_response(json.loads(response["minI"]))
 
 		user_info.l = int(response["l"])
 		user_info.likers_count = int(response["nL"])
