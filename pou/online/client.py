@@ -22,7 +22,7 @@ class PouClient:
 		self.api = 1
 		self.c = 1
 		self.version = 4
-		self.revision = 256
+		self.revision = 263
 		self.host = "http://app.pou.me"
 		self.session = requests.Session()
 
