@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2023 DaniElectra
+# SPDX-FileCopyrightText: 2024 DaniElectra
 #
 # SPDX-License-Identifier: MIT
 
